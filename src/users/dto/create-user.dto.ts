@@ -6,4 +6,7 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   lastName: string;
+
+  @IsNotEmpty()
+  roleId: string;
 }

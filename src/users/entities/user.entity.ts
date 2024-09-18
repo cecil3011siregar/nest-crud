@@ -1,3 +1,4 @@
+import { Role } from '#/role/entities/role.entity';
 import {
   Entity,
   Column,
@@ -6,6 +7,8 @@ import {
   DeleteDateColumn,
   VersionColumn,
   CreateDateColumn,
+  ManyToMany,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity()
@@ -40,6 +43,8 @@ export class User {
   })
   deletedAt: Date;
 
-  @VersionColumn()
-  version: number;
+  @ManyToOne(() => Role, (role) => role.user)
+  role: Role
+  @Column()
+  role_id: string;
 }

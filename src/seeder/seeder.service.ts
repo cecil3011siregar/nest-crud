@@ -4,7 +4,7 @@ import { DataSource } from 'typeorm';
 import { ObjectLiteral } from 'typeorm/common/ObjectLiteral';
 import { ConfigService } from '@nestjs/config';
 import { User } from '#/users/entities/user.entity';
-import { userMasterData } from '#/seeder/data/user';
+// import { userMasterData } from '#/seeder/data/user';
 
 @Injectable()
 export class SeederService implements OnApplicationBootstrap {
@@ -37,13 +37,13 @@ export class SeederService implements OnApplicationBootstrap {
     }
   }
 
-  async seeder() {
-    await this.updateOrInsert(User, userMasterData);
-  }
+  // async seeder() {
+  //   await this.updateOrInsert(User, userMasterData);
+  // }
 
   async onApplicationBootstrap() {
     if (this.configService.get('env') === 'development') {
-      await this.seeder();
+      // await this.seeder();
       this.logger.log('Seeder run successfully');
     }
   }
