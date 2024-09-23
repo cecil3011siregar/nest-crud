@@ -1,16 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Query, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, Query, Put, UseGuards, Req } from '@nestjs/common';
 import { DepartmentsService } from './departments.service';
 import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('departments')
 export class DepartmentsController {
   constructor(private readonly departmentsService: DepartmentsService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
-  async create(@Body() createDepartmentDto: CreateDepartmentDto) {
+  async create(@Req() req, @Body() createDepartmentDto: CreateDepartmentDto) {
     return {
-      data: await this.departmentsService.create(createDepartmentDto),
+      data: await this.departmentsService.create(req.user.id, createDepartmentDto),
       statusCode: HttpStatus.CREATED,
       message: 'Success'
     }

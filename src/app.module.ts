@@ -11,6 +11,7 @@ import * as pino from 'pino';
 import { SeederModule } from '#/seeder/seeder.module';
 import { DepartmentsModule } from './departments/departments.module';
 import { RoleModule } from './role/role.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -100,6 +101,7 @@ import { RoleModule } from './role/role.module';
     HealthModule,
     DepartmentsModule,
     RoleModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

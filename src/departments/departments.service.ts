@@ -12,7 +12,8 @@ export class DepartmentsService {
     private departmentsRepository: Repository<Department>
   ){}
 
-  async create(createDepartmentDto: CreateDepartmentDto) {
+  async create(user_id: string, createDepartmentDto: CreateDepartmentDto) {
+  console.log(user_id)
     const deptEntity = new Department
     deptEntity.name = createDepartmentDto.name
     deptEntity.dept_code = createDepartmentDto.dept_code
