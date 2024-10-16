@@ -8,14 +8,35 @@ import {
   Delete,
   ParseUUIDPipe,
   HttpStatus,
+  Res,
+  Query,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { storageProfile } from './helper/upload-photo';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file', storageProfile))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    if (typeof file?.filename == "undefined") {
+        return {
+          statusCode: HttpStatus.BAD_REQUEST, 
+          message: "error file cannot be upload"
+        }
+    } else {
+        return {fileName: file?.filename}
+    }
+  }
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
@@ -26,6 +47,22 @@ export class UsersController {
     };
   }
 
+  @Get('export')
+  async generatePdf(@Query('date') date: string, @Res() res: Response ){
+    const generate = await this.usersService.generatePdf(date);
+    res.set({
+      'content-type': 'application/pdf',
+      'content-disposition': 'inline; filename=example.pdf'
+    })
+    res.end(generate, 'binary')
+  }
+
+  @Get('export/excel')
+  async generateExcel(@Res() res: Response){
+    const generate = await this.usersService.generateExcel(res);
+
+    return generate;
+  }
   @Get()
   async findAll() {
     const [data, count] = await this.usersService.findAll();
