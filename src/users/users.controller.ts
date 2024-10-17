@@ -19,6 +19,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { storageProfile } from './helper/upload-photo';
+import { of } from 'rxjs';
+import { join } from 'path';
 
 @Controller('users')
 export class UsersController {
@@ -104,5 +106,12 @@ export class UsersController {
       statusCode: HttpStatus.OK,
       message: 'success',
     };
+  }
+
+  @Get('upload/:image')
+  getImage(@Param('image') imagePath: string, @Res() res: any){
+    return of(
+      res.sendFile(join(process.cwd(), `upload/profile/${imagePath}`))
+    )
   }
 }
